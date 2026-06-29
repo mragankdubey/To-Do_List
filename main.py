@@ -3,12 +3,14 @@ tasks =[]
 #(i)
 def add_task():
 	task = input("Enter task: ")
+	deadline = input("Enter deadline (DD-MM-YYYY): ")
 	if task == "":
 		print("Task cannot be empty!")
 	else:
 		task_dict = {}
 		task_dict.update({"task":task})
 		task_dict.update({"status":"Pending"})
+		task_dict.update({"deadline":deadline})
 		tasks.append(task_dict)
 		print("Task Saved Successfully✅")
 
@@ -21,6 +23,7 @@ def view_task():
 			for i in tasks:
 				print(f"{count}.  {i['task']}")
 				print("Status :", i["status"])
+				print("Deadline:",i["deadline"])
 				count+=1
 		
 #(iii)
@@ -45,7 +48,7 @@ def del_task():
 def save_task():
 	my_file = open("tasks.txt","w")
 	for i in tasks:
-		task_text= i["task"] + "|" + i["status"]
+		task_text= i["task"] + "|" + i["status"] + "|" + i["deadline"]
 		my_file.write(task_text + "\n")
 	my_file.close()
 
@@ -55,7 +58,7 @@ def load_task():
 	for line in loadtask:
 		x = line.strip()
 		parts = x.split("|")
-		task_dict2 = {"task":parts[0],"status":parts[1]}
+		task_dict2 = {"task":parts[0],"status":parts[1],"deadline":parts[2]}
 		tasks.append(task_dict2)
 	loadtask.close()
 
