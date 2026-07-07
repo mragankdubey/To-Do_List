@@ -135,10 +135,11 @@ while True:
 	print("2. View Tasks")
 	print("3. Mark Task Complete")
 	print("4. Delete Task")
-	print("5. Search Task")
-	print("6. Exit")
+	print("5. Search Tasks")
+	print("6. Edit Task")
+	print("7. Exit")
 	try:
-		choice = int(input("Enter choice (1-6) : "))
+		choice = int(input("Enter choice (1-7) : "))
 	except:
 		print("Please Type Valid Number only")
 		continue
@@ -161,9 +162,13 @@ while True:
 #Search Tasks										
 	elif choice == 5:
 		search_task()
-									
-#Exit programme			
+
+#Edit Task	
 	elif choice == 6:
+		pass
+											
+#Exit programme			
+	elif choice == 7:
 		save_task()
 		print("\n" * 30)
 		break		
