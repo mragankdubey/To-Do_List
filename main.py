@@ -1,8 +1,13 @@
 from datetime import datetime, date
 today = date.today()
 tasks =[]
-# -----DEFINING FUNCTIONS-----
-#(i)
+'''
+=============================
+|| TASK MANAGEMENT FUNCTIONS  ||
+=============================
+'''
+
+# Add a new task
 def add_task():
 	task = input("Enter task: ")
 	if task == "":
@@ -27,7 +32,7 @@ def add_task():
 	tasks.append(task_dict)
 	print("Task Saved Successfully✅")
 
-#(ii)
+#View all tasks
 def view_task():
 	if len(tasks)==0:
 		print("No tasks available")
@@ -119,8 +124,66 @@ def search_task():
 							print(f"Overdue by {abs(days_left)} days ⚠️")
 	if not found:
 			print("No matching tasks found.")
+			
+#(vii)
+def edit_task():
+	if len(tasks) == 0:
+		print("No tasks available")
+		return
+	view_task()
+	try:
+		edit = int(input("Enter task number to edit"))
+	except:
+		print("Please Enter a valid number")
+		return
+	if edit<=0 or edit > len(tasks):
+		print("Invalid Task number")
+		return
+	print("Selected Task:\n\n\n")
+	print("Tasks:",tasks[edit - 1]["task"])
+	print("Status:",tasks[edit-1]["status"])
+	if tasks[edit - 1]["deadline"] == "":
+		print("Deadline:","Not set")
+	else:
+		print("Deadline:",tasks[edit-1]["deadline"])
+	print("\n\nWhat do you want to edit ?\n")
+	print("1. Task Name")
+	print("2. Deadline")
+	print("3. Cancel")
+	try:
+		Edit_num = int(input())
+	except:
+		print("Enter Valid Number(1-3)")
+		return
+	
+	if Edit_num == 1:
+		new_task = input("Set new task name: ")
+		if new_task == "":
+			print("Task cannot be empty!")
+			return
+		tasks[edit-1]["task"] = new_task
+		print("Task changed successfully✅")
+	elif Edit_num == 2:
+		while True:
+			edit_deadline = input("Set new deadline\n(Press Enter to remove deadline)")
+			if edit_deadline == "":
+				break
+			else:
+				try:
+					datetime.strptime(edit_deadline, "%d-%m-%Y")
+					break
+				except:
+					print("Invalid date format! Please use DD-MM-YYYY or press Enter to skip.")
+			
+		tasks[edit-1]["deadline"] = edit_deadline
+		print("Deadline Changed successfully✅")
 		
-
+	elif Edit_num == 3:
+		return
+	else:
+		print("Enter Valid Number (1-3)")
+	
+	
 
 #--------MAIN MENU--------
 try:
@@ -165,8 +228,8 @@ while True:
 
 #Edit Task	
 	elif choice == 6:
-		pass
-											
+		edit_task()
+								
 #Exit programme			
 	elif choice == 7:
 		save_task()
