@@ -59,7 +59,7 @@ def view_task():
 				
 				count+=1
 		
-#(iii)
+#Mark Tasks complete 
 def mark_task():
 	comp_task = int(input("Enter Task no. that is completed : "))
 	if comp_task>len(tasks) or comp_task<=0:
@@ -68,7 +68,7 @@ def mark_task():
 		tasks[(comp_task)-1]["status"] = "Completed"
 		print("Task Updated successfully✅")
 
-#(iv)
+#Delete Tasks
 def del_task():
 	deltask = int(input("Enter Task Number to Delete: "))
 	if deltask > len(tasks) or deltask<=0:
@@ -76,26 +76,8 @@ def del_task():
 	else:
 		del tasks[(deltask)-1]
 		print("Task Deleted Successfully✅")
-
-#(v)
-def save_task():
-	my_file = open("tasks.txt","w")
-	for i in tasks:
-		task_text= i["task"] + "|" + i["status"] + "|" + i["deadline"]
-		my_file.write(task_text + "\n")
-	my_file.close()
-
-#(vi)
-def load_task():
-	loadtask = open("tasks.txt","r")
-	for line in loadtask:
-		x = line.strip()
-		parts = x.split("|")
-		task_dict2 = {"task":parts[0],"status":parts[1],"deadline":parts[2]}
-		tasks.append(task_dict2)
-	loadtask.close()
 	
-#(vii)
+#Search Tasks
 def search_task():
 	search = input("Enter Keyword to Search:").lower()
 	count = 0
@@ -125,7 +107,7 @@ def search_task():
 	if not found:
 			print("No matching tasks found.")
 			
-#(vii)
+#Edit Tasks
 def edit_task():
 	if len(tasks) == 0:
 		print("No tasks available")
@@ -182,10 +164,69 @@ def edit_task():
 		return
 	else:
 		print("Enter Valid Number (1-3)")
-	
-	
+		
+#Statistics
+def statistics():
+	if len(tasks)==0:
+		print("No tasks available")
+		return
+	total_tasks = len(tasks)
+	completed = 0
+	pending = 0
+	overdue = 0
+	print("=" * 50)
+	print("STATISTICS".center(50))
+	print("=" * 50)
+	print("\n\n\n")
+	for i in tasks:
+		if i["status"] == "Completed":
+			completed += 1
+		elif i["status"] == "Pending":
+			pending += 1
+		if i["deadline"] != "":
+			if i["status"] == "Pending":
+				deadline = datetime.strptime(i["deadline"],"%d-%m-%Y").date()
+				days_left = (deadline - today).days
+				if days_left < 0:
+					overdue += 1
+	Completion_rate = (completed/(total_tasks)) * 100
+	print("Total Tasks:\t",len(tasks))
+	print("Completed Tasks:\t",completed)
+	print("Pending Tasks:\t",pending)
+	print("Overdue Tasks:\t",overdue)
+	print(f"Completion Rate:\t {Completion_rate:.1f}%")
+			
 
-#--------MAIN MENU--------
+'''
+====================
+|| File Handling Functions ||
+====================
+'''	
+	
+#Save tasks 
+def save_task():
+	my_file = open("tasks.txt","w")
+	for i in tasks:
+		task_text= i["task"] + "|" + i["status"] + "|" + i["deadline"]
+		my_file.write(task_text + "\n")
+	my_file.close()
+
+#Load Task
+def load_task():
+	loadtask = open("tasks.txt","r")
+	for line in loadtask:
+		x = line.strip()
+		parts = x.split("|")
+		task_dict2 = {"task":parts[0],"status":parts[1],"deadline":parts[2]}
+		tasks.append(task_dict2)
+	loadtask.close()
+	
+	
+'''
+================
+|| MAIN PROGRAM  ||
+================
+'''
 try:
 	load_task()
 except:
@@ -200,9 +241,10 @@ while True:
 	print("4. Delete Task")
 	print("5. Search Tasks")
 	print("6. Edit Task")
-	print("7. Exit")
+	print("8. Statistics")
+	print("8. Exit")
 	try:
-		choice = int(input("Enter choice (1-7) : "))
+		choice = int(input("Enter choice (1-8) : "))
 	except:
 		print("Please Type Valid Number only")
 		continue
@@ -229,9 +271,12 @@ while True:
 #Edit Task	
 	elif choice == 6:
 		edit_task()
-								
-#Exit programme			
+
+#Statistics 								
 	elif choice == 7:
+		pass
+#Exit programme			
+	elif choice == 8:
 		save_task()
 		print("\n" * 30)
 		break		
