@@ -3,7 +3,7 @@ today = date.today()
 tasks =[]
 '''
 =============================
-|| TASK MANAGEMENT FUNCTIONS  ||
+TASK MANAGEMENT FUNCTIONS
 =============================
 '''
 
@@ -24,10 +24,20 @@ def add_task():
 				break
 			except:
 				print("Invalid date format! Please use DD-MM-YYYY or press Enter to skip.")
+	priority_ = input("Select Priority or press Enter to skip.\n1) High\n2) Medium\n3) Low\nYour Response(1-3): ")
+	if priority_ == "1":
+	   priority = "High"
+	elif priority_ == "2":
+	   priority = "Medium"
+	elif priority_ == "3":
+	   priority = "Low"
+	else :
+	    priority = "Not set"
 	task_dict = {
 	"task" : task,
 	"status" : "Pending",
-	"deadline" : deadline
+	"deadline" : deadline,
+	"priority" : priority
 	}
 	tasks.append(task_dict)
 	print("Task Saved Successfully✅")
@@ -37,27 +47,27 @@ def view_task():
 	if len(tasks)==0:
 		print("No tasks available")
 	else:
-			count = 1
-			for i in tasks:
-				print(f"{count}.  {i['task']}")
-				print("Status :", i["status"])
-				if i["deadline"] == "":
-					print("Deadline : Not Set")
-				else:
-					print("Deadline:",i["deadline"])
-					deadline = datetime.strptime(i["deadline"],"%d-%m-%Y").date()
-					days_left = (deadline - today).days
-					if i["status"] == "Completed":
-						pass
-					else:
-						if days_left > 0:
-							print("Days Remaining:",days_left)
-						elif days_left ==0:
-							print("Due Today ⚠️")
-						else:
-							print(f"Overdue by {abs(days_left)} days ⚠️")
-				
-				count+=1
+            count = 1
+            for i in tasks:
+                print(f"{count}.  {i['task']}")
+                print("Status :", i["status"])
+                if i["deadline"] == "":
+                    print("Deadline : Not Set")
+                else:
+                    print("Deadline:",i["deadline"])
+                    deadline = datetime.strptime(i["deadline"],"%d-%m-%Y").date()
+                    days_left = (deadline - today).days
+                    if i["status"] == "Completed":
+                        pass
+                    else:
+                        if days_left > 0:
+                            print("Days Remaining:",days_left)
+                        elif days_left ==0:
+                            print("Due Today ⚠️")
+                        else:
+                            print(f"Overdue by {abs(days_left)} days ⚠️")
+                print("Priority:",i["priority"])
+                count+=1
 		
 #Mark Tasks complete 
 def mark_task():
@@ -88,6 +98,7 @@ def search_task():
 			count+=1
 			print(f"{count}. {i['task']}")
 			print("Status :", i["status"])
+			print("Priority:", i["priority"])
 			found = True
 			if i["deadline"] == "":
 				print("Deadline : Not Set")
@@ -124,6 +135,7 @@ def edit_task():
 	print("Selected Task:\n\n\n")
 	print("Tasks:",tasks[edit - 1]["task"])
 	print("Status:",tasks[edit-1]["status"])
+	print("Priority:",tasks[edit-1]["priority"])
 	if tasks[edit - 1]["deadline"] == "":
 		print("Deadline:","Not set")
 	else:
@@ -131,11 +143,12 @@ def edit_task():
 	print("\n\nWhat do you want to edit ?\n")
 	print("1. Task Name")
 	print("2. Deadline")
-	print("3. Cancel")
+	print("3. Priority")
+	print("4. Cancel")
 	try:
 		Edit_num = int(input())
 	except:
-		print("Enter Valid Number(1-3)")
+		print("Enter Valid Number(1-4)")
 		return
 	
 	if Edit_num == 1:
@@ -159,9 +172,19 @@ def edit_task():
 			
 		tasks[edit-1]["deadline"] = edit_deadline
 		print("Deadline Changed successfully✅")
-		
 	elif Edit_num == 3:
-		return
+	       edit_priority = input("Select Priority or press Enter to skip.\n1) High\n2) Medium\n3) Low\nYour Response(1-3): ")
+	       if edit_priority == "1":
+	           tasks[edit - 1]["priority"] = "High"
+	       elif edit_priority == "2":
+	           tasks[edit - 1]["priority"]= "Medium"
+	       elif edit_priority == "3":
+	           tasks[edit - 1]["priority"] = "Low"
+	       else:
+	           tasks[edit - 1]["priority"]= "Not set"
+	       print("Priority changed successfully✅")
+	elif Edit_num == 4:
+	    return
 	else:
 		print("Enter Valid Number (1-3)")
 		
@@ -199,7 +222,7 @@ def statistics():
 
 '''
 ====================
-|| File Handling Functions ||
+File Handling Functions 
 ====================
 '''	
 	
@@ -207,7 +230,7 @@ def statistics():
 def save_task():
 	my_file = open("tasks.txt","w")
 	for i in tasks:
-		task_text= i["task"] + "|" + i["status"] + "|" + i["deadline"]
+		task_text= i["task"] + "|" + i["status"] + "|" + i["deadline"] + "|" + i["priority"]
 		my_file.write(task_text + "\n")
 	my_file.close()
 
@@ -217,7 +240,7 @@ def load_task():
 	for line in loadtask:
 		x = line.strip()
 		parts = x.split("|")
-		task_dict2 = {"task":parts[0],"status":parts[1],"deadline":parts[2]}
+		task_dict2 = {"task":parts[0],"status":parts[1],"deadline":parts[2], "priority" : parts[3]}
 		tasks.append(task_dict2)
 	loadtask.close()
 	
@@ -241,7 +264,7 @@ while True:
 	print("4. Delete Task")
 	print("5. Search Tasks")
 	print("6. Edit Task")
-	print("8. Statistics")
+	print("7. Statistics")
 	print("8. Exit")
 	try:
 		choice = int(input("Enter choice (1-8) : "))
@@ -274,7 +297,7 @@ while True:
 
 #Statistics 								
 	elif choice == 7:
-		pass
+	    statistics()
 #Exit programme			
 	elif choice == 8:
 		save_task()
